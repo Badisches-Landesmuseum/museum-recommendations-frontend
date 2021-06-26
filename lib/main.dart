@@ -51,6 +51,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late Future<MuseumObject> futureObject;
+
   int _counter = 0;
 
   @override
@@ -116,16 +117,21 @@ class _MyHomePageState extends State<MyHomePage> {
               future: futureObject,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return RichText(
-                    text:TextSpan(
-                      children: <TextSpan>[
-                        TextSpan(text: "Object Info: \n", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-                        TextSpan(text: 'Title: ', style: TextStyle(fontWeight: FontWeight.bold)),
-                        TextSpan(text: snapshot.data!.title + "\n"),
-                        TextSpan(text: "Inventory Number: ", style: TextStyle(fontWeight: FontWeight.bold)),
-                        TextSpan(text: snapshot.data!.inventoryNum + "\n"),
-                      ]
-                    )
+                  return Column (
+                    children: <Widget> [
+                      RichText(
+                        text:TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(text: "Object Info: \n", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+                            TextSpan(text: 'Title: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(text: snapshot.data!.title + "\n"),
+                            TextSpan(text: "Inventory Number: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(text: snapshot.data!.inventoryNum + "\n"),
+                          ]
+                        )
+                      ),
+                      snapshot.data!.image!,
+                    ]
                   );
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
@@ -134,7 +140,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 // By default, show a loading spinner.
                 return CircularProgressIndicator();
               },
+
             ),
+
           ],
         ),
       ),
