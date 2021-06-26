@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/requests.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      //home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: "some page",),
     );
   }
 }
@@ -45,8 +47,18 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+
+
 class _MyHomePageState extends State<MyHomePage> {
+  late Future<MuseumObject> futureObject;
   int _counter = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    futureObject = fetchMuseumObject();
+  }
+
 
   void _incrementCounter() {
     setState(() {
@@ -99,6 +111,29 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
+            ),
+            FutureBuilder<MuseumObject>(
+              future: futureObject,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return RichText(
+                    text:TextSpan(
+                      children: <TextSpan>[
+                        TextSpan(text: "Object Info: \n", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+                        TextSpan(text: 'Title: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                        TextSpan(text: snapshot.data!.title + "\n"),
+                        TextSpan(text: "Inventory Number: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                        TextSpan(text: snapshot.data!.inventoryNum + "\n"),
+                      ]
+                    )
+                  );
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+
+                // By default, show a loading spinner.
+                return CircularProgressIndicator();
+              },
             ),
           ],
         ),
