@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/stars.dart';
+import 'package:flutter/foundation.dart';
+
 
 class ObjectPage extends StatelessWidget {
   String value;
@@ -28,12 +30,11 @@ class ObjectPage extends StatelessWidget {
                   star3,
                   ElevatedButton(
                     onPressed: () {
-                      star2.setRanking(star1.getRating());
-                      star3.setRanking(star1.getRating());
+                      debugPrint("Ranking changed: " + star1.getRating().toString());
+                      star1.getRating();
                     },
                     child: Text('Submit'),
                   ),
-                  Text(testText),
                 ])));
   }
 
