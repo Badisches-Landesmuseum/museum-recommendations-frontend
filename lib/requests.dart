@@ -31,7 +31,7 @@ Future<Image> fetchMuseumObjectImage(String uri) async {
 
   print("awaiting response");
 
-  if (response.statusCode! == 200) {
+  if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
     print("fetched base64");
