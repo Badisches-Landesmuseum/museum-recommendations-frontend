@@ -5,9 +5,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-Future<MuseumObject> fetchMuseumObject() async {
+Future<MuseumObject> fetchMuseumObject({String inventoryNum = ""}) async {
+  String uri = 'http://127.0.0.1:8000/data/';
+  if (inventoryNum != "") {
+    uri = uri + inventoryNum;
+  } else {
+    uri = uri + "MK_4991";
+  }
   final response =
-  await http.get(Uri.parse('http://127.0.0.1:8000/data/MK_4991'));
+  await http.get(Uri.parse(uri));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -26,9 +32,23 @@ Future<MuseumObject> fetchMuseumObject() async {
   }
 }
 
+class Feedback {
+  final int userId;
+  final int metricJoy;
+  final int metricEmpathy;
+  final int metricThoughtfulness;
+
+  Feedback({
+    required this.userId,
+    required this.metricJoy,
+    required this.metricEmpathy,
+    required this.metricThoughtfulness
+  });
+}
+
 // меняет профайл
-Future<MuseumObject> getNextObject(String joi, String empathy, String thoughtfulness) async {
-  final response =
+Future<List<MuseumObject>> getNextObject(String joi, String empathy, String thoughtfulness) async {
+  final predictions_response =
       await http.post(
         Uri.parse('http://127.0.0.1:8000/user_score'),
         headers: <String, String>{
@@ -36,23 +56,25 @@ Future<MuseumObject> getNextObject(String joi, String empathy, String thoughtful
         },
         body: jsonEncode(<String, String>{
         // TODO: use scanObjectNum
-        'object_id': objectId,
+        'object_id': "MK_4991",
         'joi': joi,
         'empathy': empathy,
         'thoughtfulness': thoughtfulness
         })
       );
 
-  if (response.statusCode == 200) {
+  if (predictions_response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    dynamic json = jsonDecode(response.body);
-    MuseumObject object = MuseumObject.fromJson(json);
-    if (json["image_url"] != '') {
-      object.image = await fetchMuseumObjectImage(json["image_url"]);
+    dynamic json = jsonDecode(predictions_response.body);
+    List<MuseumObject> objects = [];
+    for (var i = 0; i < json["recommendations"].length; i++) {
+      MuseumObject object = await fetchMuseumObject(inventoryNum: json["recommendations"][i]);
+      objects.add(object);
     }
 
-    return object;
+    return objects;
+
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
