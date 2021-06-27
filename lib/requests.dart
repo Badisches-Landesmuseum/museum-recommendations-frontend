@@ -25,6 +25,38 @@ Future<MuseumObject> fetchMuseumObject() async {
   }
 }
 
+Future<MuseumObject> getNextObject(String objectId, String username, String joi, String empathy, String thoughtfulness) async {
+  final response =
+      await http.post(
+        Uri.parse('http://127.0.0.1:8000/user_score'),
+        headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+        'object_id': objectId,
+        'username': username,
+        'joi': joi,
+        'empathy': empathy,
+        'thoughtfulness': thoughtfulness
+        })
+      );
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    dynamic json = jsonDecode(response.body);
+    MuseumObject object = MuseumObject.fromJson(json);
+    if (json["image_url"] != '') {
+      object.image = await fetchMuseumObjectImage(json["image_url"]);
+    }
+    return object;
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load object');
+  }
+}
+
 Future<Image> fetchMuseumObjectImage(String uri) async {
   print("sending request");
   final response = await http.get(Uri.parse(uri));
