@@ -47,7 +47,7 @@ class Feedback {
 }
 
 // меняет профайл
-Future<List<MuseumObject>> getNextObject(String joi, String empathy, String thoughtfulness) async {
+Future<List<MuseumObject>> getNextObject(String obj_id, String joi, String empathy, String thoughtfulness) async {
   final predictions_response =
       await http.post(
         Uri.parse('http://127.0.0.1:8000/user_score'),
@@ -55,8 +55,8 @@ Future<List<MuseumObject>> getNextObject(String joi, String empathy, String thou
         'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-        // TODO: use scanObjectNum
-        'object_id': "MK_4991",
+
+        'object_id': obj_id,
         'joi': joi,
         'empathy': empathy,
         'thoughtfulness': thoughtfulness

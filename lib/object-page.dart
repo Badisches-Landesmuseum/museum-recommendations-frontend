@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/stars.dart';
 import 'package:flutter/foundation.dart';
-
+import 'package:frontend/requests.dart';
 
 class ObjectPage extends StatelessWidget {
   String value;
@@ -32,6 +32,7 @@ class ObjectPage extends StatelessWidget {
                     onPressed: () {
                       debugPrint("Ranking changed: " + star1.getRating().toString());
                       star1.getRating();
+                      getNextObject(value, star1.getRating().toString(), star2.getRating().toString(), star3.getRating().toString());
                     },
                     child: Text('Submit'),
                   ),
