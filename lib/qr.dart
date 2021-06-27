@@ -24,12 +24,12 @@ class HomePageState extends State<HomePage> {
   Future _scanQR() async {
     try {
       String qrResult = await BarcodeScanner.scan();
-      setState(() {
-        result = qrResult;
-      });
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ObjectPage(value: result)
+          builder: (context) => ObjectPage(value: qrResult)
       ));
+      setState(() {
+        result = "Scan QR code of a museum piece";
+      });
     } on PlatformException catch (ex) {
       if (ex.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
