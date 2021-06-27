@@ -17,6 +17,7 @@ Future<MuseumObject> fetchMuseumObject() async {
     if (json["image_url"] != '') {
       object.image = await fetchMuseumObjectImage(json["image_url"]);
     }
+    // TODO: save scanObjectNum
     return object;
   } else {
     // If the server did not return a 200 OK response,
@@ -25,7 +26,8 @@ Future<MuseumObject> fetchMuseumObject() async {
   }
 }
 
-Future<MuseumObject> getNextObject(String objectId, String username, String joi, String empathy, String thoughtfulness) async {
+// меняет профайл
+Future<MuseumObject> getNextObject(String joi, String empathy, String thoughtfulness) async {
   final response =
       await http.post(
         Uri.parse('http://127.0.0.1:8000/user_score'),
@@ -33,8 +35,8 @@ Future<MuseumObject> getNextObject(String objectId, String username, String joi,
         'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
+        // TODO: use scanObjectNum
         'object_id': objectId,
-        'username': username,
         'joi': joi,
         'empathy': empathy,
         'thoughtfulness': thoughtfulness
@@ -49,6 +51,7 @@ Future<MuseumObject> getNextObject(String objectId, String username, String joi,
     if (json["image_url"] != '') {
       object.image = await fetchMuseumObjectImage(json["image_url"]);
     }
+
     return object;
   } else {
     // If the server did not return a 200 OK response,

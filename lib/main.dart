@@ -42,6 +42,7 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  String scanObjectNum;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
