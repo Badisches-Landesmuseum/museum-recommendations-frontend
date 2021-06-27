@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 Future<MuseumObject> fetchMuseumObject() async {
+  print("sending request");
   final response =
   await http.get(Uri.parse('http://127.0.0.1:8000/data/MK_4991'));
-
+  print("waiting");
   if (response.statusCode == 200) {
+    print("got response");
     // If the server did return a 200 OK response,
     // then parse the JSON.
     dynamic json = jsonDecode(response.body);

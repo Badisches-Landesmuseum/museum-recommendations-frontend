@@ -44,13 +44,12 @@ class MuseumObjectDisplay extends StatefulWidget {
 }
 
 class _MuseumObjectDisplayState extends State<MuseumObjectDisplay>{
-  late Future<MuseumObject> futureObject;
 
   @override
   Widget build(BuildContext context) {
     return Center(
         child: FutureBuilder<MuseumObject>(
-          future: futureObject,
+          future: fetchMuseumObject(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Column (
@@ -83,7 +82,7 @@ class _MuseumObjectDisplayState extends State<MuseumObjectDisplay>{
 
   @override
   void initState() {
-    futureObject = fetchMuseumObject();
+    // futureObject = ;
     super.initState();
   }
 
