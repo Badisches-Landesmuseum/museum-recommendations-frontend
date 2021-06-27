@@ -36,7 +36,7 @@ Future<MuseumObject> getNextObject(String joi, String empathy, String thoughtful
         },
         body: jsonEncode(<String, String>{
         // TODO: use scanObjectNum
-        'object_id': objectId,
+        'object_id': "MK_4991",
         'joi': joi,
         'empathy': empathy,
         'thoughtfulness': thoughtfulness
